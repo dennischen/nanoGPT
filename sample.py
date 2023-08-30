@@ -2,6 +2,7 @@
 Sample from a trained model
 """
 import os
+import time
 import pickle
 from contextlib import nullcontext
 import torch
@@ -80,6 +81,8 @@ if start.startswith('FILE:'):
 start_ids = encode(start)
 x = (torch.tensor(start_ids, dtype=torch.long, device=device)[None, ...])
 
+s1 = time.time()
+
 # run generation
 with torch.no_grad():
     with ctx:
@@ -87,3 +90,6 @@ with torch.no_grad():
             y = model.generate(x, max_new_tokens, temperature=temperature, top_k=top_k)
             print(decode(y[0].tolist()))
             print('---------------')
+
+s2 = time.time()
+print(f"time spent {s2 - s1}s")
